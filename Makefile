@@ -26,9 +26,9 @@ fmt-check: ## Ruff format (check only)
 type: ## Pyright type check
 	$(PY) pyright
 
-security: ## Bandit + pip-audit
+security: ## Bandit + pip-audit (OSV fallback when the default PyPI service is unreachable)
 	$(PY) bandit -c pyproject.toml -r src/ -q
-	$(PY) pip-audit
+	$(PY) pip-audit || $(PY) pip-audit --vulnerability-service osv
 
 test: ## Full test suite with coverage gate
 	$(PY) pytest --cov --cov-fail-under=90
